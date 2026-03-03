@@ -1,0 +1,36 @@
+/* exercise 3.2: Selectors */
+/* 1. link to form.html */ 
+/* 2. Observe the changes in style */ 
+
+/* single type  selector */  
+div{
+    border: 2px solid black;
+    text-align: left;
+    margin: 30px;
+}
+
+/* multiple type selectors */
+head,body {
+    width: 100%;
+    height: 100%;
+}
+
+/* univeral selector */
+*{
+    text-align: center;
+}
+
+/*class selector */
+.num{
+    font-weight: bold;
+}
+
+
+/* id selector */
+#submit_button{
+    font-weight: bold;
+    color: red;
+    border: 2px solid black;
+}
+
+

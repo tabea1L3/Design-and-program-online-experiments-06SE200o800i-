@@ -1,0 +1,108 @@
+<!--Exercise 3.1: form and input-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="selector.css">
+    <title>Participant Information and Consent</title>
+    <style> #submit_button {color:blue;} .final {background-color:beige;} </style>
+
+</head>
+<body>
+
+    <form id="experimentForm" target="_self">
+        <h3>Personal Information</h3>
+  
+
+      <!--3.2.1 Create inputs to ask participants for some personal information, like ID (as text input; placehoder text as ABC123), age (as number input, add min = 18 and max = 35 input)-->
+      <label>1. ID: *</label>
+      <input type="text">
+      
+      <br>  <!--adds a space-->
+      <br>  <!--adds another space; could also be written side by side-->
+      <label>2. Age: </label>
+      <input type="number" min="18" max="35">
+
+
+      <!--3.2.2 Add drop-down more options (Non-Binary) for gender information-->
+      <p>3. Gender:</p>
+      <select name="gender" >
+        <option value="" disabled selected>Please select your gender</option>
+        <option>Woman</option>
+        <option>Man</option>
+        <option>Non-binary</option>
+      </select>
+      <br><br> 
+
+      <!--3.2.3 Add an input as a type of input to "range" for this alertness question, don't forget about the min and max values for the range-->
+       <h3>Tiredness Rating</h3>
+       <p>How tired are you right now? </p>
+       <p>(1-Not at all;5-Too tired to do anything)</p>
+       <input type="range" min="1" max="5">
+       <!-- adds a Schieberegler -->
+
+      <h3>Happyness Rating</h3>
+      <p id="happiness-q">How happy are you right now?</p>
+
+          <label class="likert-option">
+              <input type="radio" name="happiness" id="h-1" value="1" >
+              <span class="num">1</span>
+              <span class="desc">Very unhappy</span>
+          </label>
+
+          <label class="likert-option">
+              <input type="radio" name="happiness" id="h-2" value="2">
+              <span class="num">2</span>
+              <span class="desc">Slightly unhappy</span>
+          </label>
+
+          <label class="likert-option">
+              <input type="radio" name="happiness" id="h-3" value="3">
+              <span class="num">3</span>
+              <span class="desc">Neutral</span>
+          </label>
+
+          <label class="likert-option">
+              <input type="radio" name="happiness" id="h-4" value="4">
+              <span class="num">4</span>
+              <span class="desc">Slightly happy</span>
+          </label>
+
+          <label class="likert-option">
+              <input type="radio" name="happiness" id="h-5" value="5">
+              <span class="num">5</span>
+              <span class="desc">Very happy</span>
+          </label>
+
+      <div class="final">
+      <!--3.2.4 change the type of input to "checkbox" for the "consent_yes" and "consent_no"-->
+        <h3>Please confirm your consent: </h3>
+        <input type="checkbox" name="consent_yes" value="yes"> I have been given information about this research study and its risks and benefits and have had the opportunity to ask questions and have them answered to my satisfaction. I consent to participate in this study. <br> 
+        <br><br>
+        <input type="checkbox" name="consent_no" value="no"> I changed my mind and I do not consent to participate in this study. <br> 
+        <br><br>
+
+        <p> For further information, please contact your experimenter (XYZ; xyz@uzh.ch).</p>
+      </div>
+        
+      <!-- 3.2.5 change the color of 'Submit To Continue' to blue externally using id; and change the background-color of all class="final" to beige-->
+      <input id="submit_button" type="button" value="Submit To Continue" class="final">
+  
+
+        <!-- # plus 1: make personal information inputs (ID, age, gender) mandatory/required. -->   
+        <!-- # plus 2: use inline css to make/add asterisk in red to indicate that it is required.-->
+        <!-- # plus 3: explore name attribute by deleting the name in id="h-5" and try to select 5 Very happy and any other options-->   
+        <!-- # plus 4: try to use button tags instead of input to create a exit button; learn from documentary https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button-->  
+      <!-- # plus 5: when submit, redirect to a different page example_task_instruction.html learn from https://www.w3schools.com/tags/att_form_action.asp or https://www.w3schools.com/tags/att_formaction.asp -->
+
+      </form>
+
+      
+</body>
+</html>
+
+
+
+
