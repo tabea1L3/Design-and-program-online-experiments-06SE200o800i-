@@ -12,8 +12,8 @@ console.log(example); // ? -> 10
 
 let a = 8;
 let b = 2;
-console.log(a+b); // ?
-console.log(8**2); // ?
+console.log(a+b); //10
+console.log(8**2); // 64
 
 
 /* 4.2.2: Equality and Strict Equality:
@@ -21,10 +21,10 @@ First, work out from what you understand by replacing the ? with your expected o
 let x = 5;
 let y = "5";
 
-console.log(x == y);  // ?
-console.log(x === y); // ?
-console.log(x != y);  // ?
-console.log(x !== y); // ?
+console.log(x == y);  // true (because loose equality, same value)
+console.log(x === y); // false (because different datatypes)
+console.log(x != y);  // false
+console.log(x !== y); // true (because different datatypes)
 
 
 /* 4.2.3: logical operators:
@@ -32,14 +32,14 @@ First, work out from what you understand by replacing the ? with your expected o
 let isAdult = true;
 let hasNormalVision = false;
 
-console.log(isAdult && hasNormalVision); // ?
-console.log(isAdult || hasNormalVision); // ?
+console.log(isAdult && hasNormalVision); // false (they are not equal )
+console.log(isAdult || hasNormalVision); // true (they are not qual)
 
 let score = 50;
 
-console.log(score > 40 && score < 60);  // ?
-console.log(score * 2 === 100);         // ?
-console.log(score % 2 === 0 || score < 0); // ?
+console.log(score > 40 && score < 60);  // true
+console.log(score * 2 === 100);         // true
+console.log(score % 2 === 0 || score < 0); // true
 
 
 /* 4.2.4: what this newFunction will return:  
@@ -50,7 +50,7 @@ function newFunction(a,b) {
     return { a, b, c};
 }
 let myResults = newFunction(1, 3);
-console.log("my results:", myResults); // ?
+console.log("my results:", myResults); // object
 
 /* 4.2.5: Verify your answers by running the JavaScript script in operator.html. Open the browser's developer console and check the logged output. Compare the results with the expected answers from the previous steps. */
 
