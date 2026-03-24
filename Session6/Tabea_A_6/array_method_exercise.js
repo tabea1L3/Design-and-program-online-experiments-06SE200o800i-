@@ -36,19 +36,14 @@ const acc = correctCount / trials.length;
 console.log("Accuracy:", acc); // 0.6
 
 // your code end
-console.log("Correct answers:", correctCount);
+/*console.log("Correct answers:", correctCount);
 const acc =  correctCount/trials.length;
-console.log("Accuracy:", acc);
+console.log("Accuracy:", acc);*/
  
 
 /* plus 1: could you think of doing exercise 1 in chaining */
-const truetrials = trials
-.filter((trials) => trials = true // only keep condition = true
-.map((trials) => trials = true) // 
-console.log("truetrials", truetrials);
 
 
- 
  
  
  

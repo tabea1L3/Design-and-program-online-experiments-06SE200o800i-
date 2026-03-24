@@ -16,13 +16,9 @@
         /* 1. use push() to add trial1,trial2,trial_end into timeline
            2. run timeline array wiht jsPsych
          */
-        
-        /* plus 2: can you think of a way to run trial2 -> trial1 -> trial_end*/
+        const jsPsych = initJsPsych();  //setup jsPsych
+        const timeline = []; // creat timeline arry
 
-      // Initialize jsPsych 
-      const jsPsych = initJsPsych();
-
-      const timeline = []; 
 
       // Define your trials using the imported plugin.
       const trial1 = {
@@ -44,10 +40,17 @@
         stimulus: 'End',
         choices: "NO_KEYS"
       };
-     
+
+      // add trials to timeline using push()
+      timeline.push(trial1, trial2, trial_end); 
 
       // run timeline
-      jsPsych.run();
+      jsPsych.run(timeline);
+
+      /* plus 2: can you think of a way to run trial2 -> trial1 -> trial_end*/
+      // const timeline2 = [trial2, trial1, trial_end]; // make new timeline array with new order
+      // jsPsych.run(timeline2); // run new timeline
+
 
   
     </script>
