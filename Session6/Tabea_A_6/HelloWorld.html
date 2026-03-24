@@ -1,0 +1,38 @@
+<!-- Exercise 2: Create Hello World in jsPsych -->
+<!--Create a html file, name it and add simple html setup code -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My experiment</title> <!-- Title of Webpage-->
+
+<!-- Load jsPsych library --> 
+<script src="https://unpkg.com/jspsych@8.2.3"></script>
+
+<!-- Use a plugin to print a message -->
+<script src="https://www.jspsych.org/latest/plugins/html-keyboard-response/"></script>
+
+<!-- Optional: load stylesheet -->
+<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.5/dist/plugin-html-keyboard-response.js"></script>
+
+
+</head>
+<body>
+    </body>  <!-- anything added to the body will be displayed on the page and remain there,
+                    even after the trial has ended (unless otherwise specified). -->
+
+<!-- Create script element & initalize jsPsych -->
+<script>
+    const jsPsych = initJsPsych();
+  //create a trial using the plugin (html response, pendant to js)
+    const hello_trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'Hello world!'
+    }
+
+<!-- Run the experiment-->
+jsPsych.run([hello_trial]);
+</script>
+</html>
