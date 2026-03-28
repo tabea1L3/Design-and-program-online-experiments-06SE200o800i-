@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>multiple timeline</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <!-- The experiment script is loaded as a module -->
+    <script>
+        /* exercise 6.2.3:  */
+        /* 1. use push() to add trial1,trial2,trial_end into timeline
+           2. run timeline array wiht jsPsych
+         */
+        
+        /* plus 2: can you think of another way to run trial2 -> trial1 -> trial_end*/
+
+      // Initialize jsPsych 
+      const jsPsych = initJsPsych();
+
+      const timeline = []; 
+      // method 2, without declare timeline, you can call jsPsych.run([trial1, trial2, trial_end])
+      console.log(timeline);
+
+      // Define your trials using the imported plugin.
+      const trial1 = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 'Trial 1',
+        choices: "ALL_KEYS"
+      };
+      timeline.push(trial1)// method 1.2
+      
+  
+
+      
+      const trial2 = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 'Trial 2',
+        choices: "ALL_KEYS"
+      };
+      timeline.push(tria2)// method 1.2
+     
+
+      const trial_end = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 'End',
+        choices: "NO_KEYS"
+      };
+      timeline.push(trial_end)// method 1.2
+     
+      // method 1.1
+      timeline.push(trial1, trial2, trial_end);
+      console.log(timeline);
+
+      // run timeline
+      jsPsych.run(timeline);
+
+  
+    </script>
+  </body>
+</html>
