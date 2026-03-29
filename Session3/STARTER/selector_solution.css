@@ -25,11 +25,14 @@ head,body {
     font-weight: bold;
 }
 
+.final{
+    background-color: beige;
+}
 
 /* id selector */
 #submit_button{
     font-weight: bold;
-    color: red;
+    color: blue;
     border: 2px solid black;
 }
 
