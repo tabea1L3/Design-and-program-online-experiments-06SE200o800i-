@@ -15,9 +15,47 @@
 </head>
 <body>
         //Step 1: add script for experiment 
+        <script>  // doing it internally, since no js file created
+        const jsPsych = initJsPsych();
+        const timeline = [];
+
+        const fixation = {
+            type: jsPsychHtmlKeyboardResponse, //set type of trial
+            stimulus: "<h1>+</h1>",
+            choices: "NO_KEYS",
+            trial_duration: 1000
+        }
+
+        timeline.push(fixation);
+
+        function drawFN(canvas){
+            const ctx = canvas.getContext("2d");
+            console.dir(ctx);
+            ctx.fillStyle="pink";
+            ctx.fillRect(500, 500, 100, 50); //place, place, width, height
+            ctx.strokeStyle = "red";
+            ctx.strokeRect(500, 500, 100, 50);
+            ctx.clearRect(550, 550, 10, 10);
+
+        }
+
+        const canvasTrial = {
+            type: jsPsychCanvasKeyboardResponse,
+            canvas_size: [window.innerWidth, window.innerHeight],
+            stimulus: drawFN,  //stimulus was defined under function drawFN
+            choices: "9",
+            trial_duration: 5000 // if only choices should be active, leave this empty
+        }
+
+        timeline.push(canvasTrial);
+
+        jsPsych.run(timeline);
+        
+        </script>
   
 
         // step 2: initiate jsPsych instance and assign to a variable 
+
 
 
         //Step 3:  build your timeline

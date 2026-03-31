@@ -8,8 +8,11 @@
 // plus 1: draw an easter egg (with some decoration) next to the bunny 
 
 //step 2:  initiate jsPsych
+const jsPsych = initJsPsych();
 
 // step 3: building timeline 
+const timeline = [];
+
 
 // instruction 
 const instruction = {
@@ -21,15 +24,57 @@ const instruction = {
 }
 timeline.push(instruction);
 
+
+// Fixation trial
+const fixation = {
+    type: jsPsychHtmlKeyboardResponse, //set type of trial
+    stimulus: "<h1>+</h1>",
+    choices: "NO_KEYS",
+    trial_duration: 1000
+        }
+//add it to timeline
+    timeline.push(fixation);
+
+
+// Canvas trial
+//first, define function
+function drawFN(canvas){
+            const ctx = canvas.getContext("2d");
+            console.dir(ctx);
+            ctx.fillStyle="pink";
+            ctx.fillRect(500, 500, 100, 50); //place, place, width, height
+            ctx.strokeStyle = "red";
+            ctx.strokeRect(500, 500, 100, 50);
+            ctx.clearRect(550, 550, 10, 10);
+
+        }
+//then define trial
+        const canvasTrial = {
+            type: jsPsychCanvasKeyboardResponse,
+            canvas_size: [window.innerWidth, window.innerHeight],
+            stimulus: drawFN,  //stimulus was defined under function drawFN
+            choices: "9",
+            trial_duration: 5000 // if only choices should be active, leave this empty
+        }
+//add it to timeline
+        timeline.push(canvasTrial);
+
+
 // 7.2.2 make the trial_duration randomly selected from 1s, 2s or 3s
 // fixation 
+const randDuration = Math.floor(Math.random() * 3) +1
+// *3 would say 0 to 2, excluding 3. But with +1 it shifts to 1 to 3
+// or alternatively: const durations = [1000, 2000, 3000] these are ms
+// and then inst. of randDuration: durations[Math.floor(Math.random() * durations.length)]
+
 const fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "+",
     choices: "NO_KEYS",
-    trial_duration: 1000
+    trial_duration: randDuration
 }
 timeline.push(fixation);
+
 
 
 const drawBunnyfn = function (canvas){
@@ -37,8 +82,7 @@ const drawBunnyfn = function (canvas){
     const context = canvas.getContext("2d");
    
     // The following is the block of drawing a bunny
-
-    
+   
        let x = canvas.width/2;
        let y = canvas.height/2;
    
@@ -95,6 +139,16 @@ const drawBunnyfn = function (canvas){
 
 }
 
+const drawBunnyTrial = {
+    type: jsPsychCanvasKeyboardResponse,
+    canvas_size: [600,600],
+    stimulus: drawBunnyfn,
+    choices: [' '], //spacebar
+    trial_duration: 5000
+}
+timeline.push(drawBunnyTrial);
+
+
 
 const end = {
     type: jsPsychHtmlKeyboardResponse,
@@ -106,5 +160,6 @@ timeline.push(end)
 
 // step 4: run the timline
 
+jsPsych.run(timeline);
 
 
