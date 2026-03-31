@@ -25,17 +25,6 @@ const instruction = {
 timeline.push(instruction);
 
 
-// Fixation trial
-const fixation = {
-    type: jsPsychHtmlKeyboardResponse, //set type of trial
-    stimulus: "<h1>+</h1>",
-    choices: "NO_KEYS",
-    trial_duration: 1000
-        }
-//add it to timeline
-    timeline.push(fixation);
-
-
 // Canvas trial
 //first, define function
 function drawFN(canvas){
