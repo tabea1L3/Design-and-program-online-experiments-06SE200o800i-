@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Title</title>
+
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+
+
+  </head>
+  <body>
+    <h1 id='my-heading'>My heading</h1>
+    <h2 id="welcome"> Welcome </h2>
+    <script>
+
+      // //starting example
+      // const myHeadingContent = "Hello, DOM!"; 
+      // const heading = document.getElementsByTagName("h1")[0]; // there can be possible multiple h1, therefore, you need to access a specific element. 
+      // heading.textContent += ": ";
+      // heading.textContent += myHeadingContent;
+
+      /* 9.1.2 */
+      // use getElementById() & . textContent to achieve the same goal as in the starting example
+
+      
+    </script>
+
+    <script>
+
+          /* initialize jsPsych */
+          const jsPsych = initJsPsych();
+
+          /* create timeline */
+          const timeline = [];
+
+
+           // Countdown trial (3,2,1,Go!)
+          const countdown = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: '<h1 style="color: red;">3</h1>',
+            choices: "NO_KEYS",
+            on_load: () => {
+                let count = 3;
+                const display = jsPsych.getDisplayElement();
+                const interval = setInterval(() => {
+                    if (count > 1) {
+                        count--;
+                        display.innerHTML = `<h1 style="color: red;">${count}</h1>`;
+                    } else {
+                        clearInterval(interval);
+                        display.innerHTML = '<h1 style="color: red;">Go!</h1>';
+                        setTimeout(() => jsPsych.finishTrial(), 500);
+                    }
+                }, 1000);
+            }
+          };
+          timeline.push(countdown);
+
+          const progress_duration = 2000
+          const progressTrial = {
+                  type: jsPsychHtmlKeyboardResponse,
+                  stimulus: `
+                      <div style="text-align: center;">
+                          <p>Loading progress...</p>
+                          <div style="width: 80%; background-color: grey;">
+                              <div id="myProgressFill" style="width: 0%; height: 30px; background-color: blue;"></div>
+                          </div>
+                      </div>
+                  `,
+                  choices: "NO_KEYS",
+                  on_load: () => {  
+                      // const fill = document.getElementById('myProgressFill');
+                      const fill = jsPsych.getDisplayElement().querySelector('#myProgressFill');
+                      // console.log(fill);
+                      let startTime = null;
+                      let animationId = null;
+                      function animate(timestamp) {
+                          console.log(fill);
+                          if (!startTime) startTime = timestamp;
+                          const elapsed = timestamp - startTime;
+                          const percent = Math.min((elapsed / progress_duration) * 100, 100);
+                          fill.style.width = percent + '%';
+                          if (percent < 100) {
+                              animationId = requestAnimationFrame(animate);
+                          } else {
+                              cancelAnimationFrame(animationId);
+                          }
+                      }
+                      animationId = requestAnimationFrame(animate);
+                  },
+                  trial_duration: progress_duration
+              };
+        timeline.push(progressTrial);
+
+
+
+          jsPsych.run(timeline)
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Verbal Fluency Test</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-initialize-microphone@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-audio-response@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <style>
+   body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    </style>
+</head>
+  <body>
+  <script>
+
+    /* initialize jsPsych */
+    const jsPsych = initJsPsych(
+      /* 8.1.6*/
+      {
+      on_finish: () => {
+        // Local save as JSON
+        jsPsych.data.get().localSave('json', 'verbal_fluency_data.json');}
+      }
+    );
+
+   /* 8.1.2 global-level*/
+    jsPsych.data.addProperties({
+      participant_id: 'P001',
+      session: 1
+    });
+
+
+    /* create timeline */
+    const timeline = [];
+
+    /* initiate the microphone in the timeline */
+    const microphoneInit = {
+        type: jsPsychInitializeMicrophone,
+        on_start: () => {
+          console.log("Initializing microphone...");
+        },
+        on_finish: () => {
+          console.log("Microphone initialized.");
+        }
+      };
+    timeline.push(microphoneInit);
+
+   /* add instruction the timeline */
+    const instruction = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <h1>Verbal Fluency Test Instruction</h2>
+        <p>Tell me as many words as you
+        can think of that begin with a certain letter of the alphabet that I will tell you in a moment. <br><br> You
+        can say any kind of word you want, except for proper nouns (like Bob or Boston), numbers <br><br>
+        The recording will stop after one minute.  <br><br> Are you ready?.</p>
+      `,
+      /* 8.1.3*/
+      data: {
+        phase: `instruction`,
+      },
+      /* 8.1.4*/
+      on_finish: (data) => {
+        data.speed_label = data.rt < 300 ? 'fast' : 'slow';
+        data.reactionTime = data.rt
+      },
+      choices: ['Yes,I am ready!']
+    }
+    timeline.push(instruction);
+
+    /* exercise 8.1:  add recording for 1 min the timeline */
+    /* 8.1.3*/
+    const record = {
+        type: jsPsychHtmlAudioResponse,
+        stimulus: `
+            <p>Now, tell me as many words as you can think of that begin with the letter F.</p>
+        `,
+        recording_duration: 60000,
+        save_audio_url: true,
+        show_done_button: false,
+        allow_playback: true,
+        data:{
+          phase:'fluency',
+          condition: "letter-F"
+        }
+    };
+    timeline.push(record);
+
+    /* 8.1.5*/
+    const endMessage = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: () => {
+      // Access and summarize data
+      const allData = jsPsych.data.get();
+      console.log(allData.csv());
+      console.log(allData.json());
+      const nSlow = allData.filter({ speed_label: 'slow' }).count();
+      return nSlow >=0? "too slow!": "Thank you!";
+      },
+      
+      choices: ['Finish'],
+      data: { phase: 'end' }
+    };
+    timeline.push(endMessage);
+
+
+    /* start the experiment */
+    jsPsych.run(timeline);
+    
+
+
+  </script>
+  </body>
+</html>
