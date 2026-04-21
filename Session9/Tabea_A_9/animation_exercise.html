@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Moving Ball Exercise</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet">
+</head>
+<body>
+    <script>
+        const jsPsych = initJsPsych();
+        const timeline = [];
+
+        const ballTrial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+            <canvas id="movingCanvas" width="600" height="300" style="border:1px solid black;"></canvas>
+            `,
+            choices: "NO_KEYS",
+            on_load: () => {
+
+                // first, get the element and get the canvas context
+                const canvas = document.getElementById('movingCanvas');
+                const ctx = canvas.getContext('2d');
+
+                // then, pre-set the ball parameters
+                let x = 100;            // x position (pixels)
+                let y = 100;            // y position (pixels)
+                let dx = 2;             // horizontal speed (pixels per frame)
+                let dy = 2;             // vertical speed
+                const radius = 20;      // ball size
+
+
+                // time & animation starting value
+                let startTime = null;
+                let animationId = null;
+
+                // 9.2.1 draw a blue circle
+                function drawBall() {
+                    // TODO: 
+                    // 1. clear canvas use ctx.clearRect(0, 0, canvas.width, canvas.height)
+                    // 2. draw a blue circle at (x, y) with given radius
+                    
+                 
+                }
+
+
+                function updatePosition() {
+                    // change x and y by dx and dy
+                    x += dx;
+                    y += dy;
+                }
+
+                function applyBouncing() {
+                    // left/right walls
+                    if (x + radius >= canvas.width || x - radius <= 0) {
+                        dx = -dx;
+                    }
+                    // top/bottom walls
+                    if (y + radius >= canvas.height || y - radius <= 0) {
+                        dy = -dy;
+                    }
+                }
+
+
+                // 9.2.2 create the animation using requestAnimationFrame & it will run for 3s, then stop
+                function animate(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    const elapsed = timestamp - startTime;
+
+                    // Run for 3 seconds, then stop
+                    if (elapsed < 3000) {
+              
+
+
+                    } else {
+                        // End animation
+                    
+                    }
+                }
+
+                // Start the animation
+            
+
+            }
+        };
+
+        timeline.push(ballTrial);
+        jsPsych.run(timeline);
+    </script>
+</body>
+</html>
