@@ -16,13 +16,17 @@
     <script>
 
       // //starting example
-      // const myHeadingContent = "Hello, DOM!"; 
-      // const heading = document.getElementsByTagName("h1")[0]; // there can be possible multiple h1, therefore, you need to access a specific element. 
-      // heading.textContent += ": ";
-      // heading.textContent += myHeadingContent;
+      const myHeadingContent = "Hello, DOM!"; 
+      const heading = document.getElementsByTagName("h1")[0]; // there can be possible multiple h1, therefore, you need to access a specific element. 
+      heading.textContent += ": ";
+      heading.textContent += myHeadingContent;
 
       /* 9.1.2 */
       // use getElementById() & . textContent to achieve the same goal as in the starting example
+      document.getElementById("my-heading").textContent += Hello, DOM!/session9";
+      // select Element                      add to text content (to change it would be =)
+
+      document.getElementByID("welcome").textContent += "Hi neighbour :)";
 
       
     </script>
@@ -58,6 +62,7 @@
           };
           timeline.push(countdown);
 
+          //progress bar trial
           const progress_duration = 2000
           const progressTrial = {
                   type: jsPsychHtmlKeyboardResponse,

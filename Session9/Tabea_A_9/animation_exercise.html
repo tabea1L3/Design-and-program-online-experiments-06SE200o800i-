@@ -37,12 +37,19 @@
 
                 // 9.2.1 draw a blue circle
                 function drawBall() {
-                    // TODO: 
-                    // 1. clear canvas use ctx.clearRect(0, 0, canvas.width, canvas.height)
-                    // 2. draw a blue circle at (x, y) with given radius
-                    
+                // TODO: 
+                // 1. clear canvas use ctx.clearRect(0, 0, canvas.width, canvas.height)
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // 2. draw a blue circle at (x, y) with given radius
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = "blue";
+                ctx.fill();
+                ctx.closePath();
+                // see block above, where everything is defined 
                  
                 }
+                drawBall();  //call function
 
 
                 function updatePosition() {
@@ -63,21 +70,27 @@
                 }
 
 
-                // 9.2.2 create the animation using requestAnimationFrame & it will run for 3s, then stop
+                // 9.2.2 create the animation using requestAnimationFrame
+                // & it will run for 3s, then stop
                 function animate(timestamp) {
                     if (!startTime) startTime = timestamp;
                     const elapsed = timestamp - startTime;
 
-                    // Run for 3 seconds, then stop
-                    if (elapsed < 3000) {
-              
-
-
-                    } else {
+                    // Run for 8 seconds, then stop
+                    if (elapsed < 8000) {
+                        drawBall();  //function has been defined above
+                        applyBouncing(); //makes ball bounce
+                        updatePosition(); //same as here
+                        requestAnimationFrame(animate);
+                                  } else {
+                                    cancelAnimationFrame(animationID);
+                                    jsPsych.finishTrial();
                         // End animation
-                    
                     }
                 }
+                requestAnimationFrame(animate);
+                 // how to make it bounce?
+
 
                 // Start the animation
             
