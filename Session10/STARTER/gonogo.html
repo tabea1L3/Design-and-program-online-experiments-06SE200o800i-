@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go/No-Go Task</title>
+
+    <!-- We load jsPsych and the keyboard-response plugin from a CDN. -->
+
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: grey;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 40px auto;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .controls {
+            margin: 20px 0;
+        }
+
+        button {
+            margin: 0 8px;
+            padding: 10px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #message {
+            margin: 16px 0 24px;
+            font-weight: bold;
+        }
+
+        .dark {
+            background: #1f1f1f;
+            color: #f5f5f5;
+        }
+
+        .stimulus-go {
+            font-size: 56px;
+            color: green;
+            font-weight: bold;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stimulus-nogo {
+            font-size: 56px;
+            color: yellow;
+            font-weight: bold;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown-box {
+            width: 500px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            font-size: 120px;
+            font-weight: bold;
+            color: black;
+        }
+
+
+
+        .stimulus-img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        #jspsych-target {
+            margin-top: 20px;
+
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Go/No-Go Task</h1>
+
+        <p>
+            Welcome to the experiment!
+        </p>
+
+        <div class="controls">
+             <!--  This button will switch between text stimuli and image stimuli. -->
+            <button id="ruleBtn">Switch Text/Image Rule</button>
+            <!-- This button will start the experiemnt. -->
+            <button id="startBtn" onclick="startExperiment()">Start Task</button>
+            <!--This button will change the style. -->
+            <button id="themeBtn">Change the style</button>
+        </div>
+
+        <div id="message">Ready?</div>
+        <div id="jspsych-target"></div>
+    </div>
+
+    <script>
+
+        // This variable stores the current stimulus mode.
+        // 0 = text mode, 1 = image mode
+        let text_0_img_1 = 0;
+
+        // These helper functions decide what the GO and NO-GO stimuli look like.
+        // If we are in text mode, we show words.
+        // If we are in image mode, we show pictures.
+        function getStimulusGo() {
+            if (text_0_img_1 === 0) {
+                return "GO";
+            } else {
+                return `<img src="img/happy.png" alt="happy stimulus" class="stimulus-img">`;
+            }
+        }
+
+        function getStimulusNoGo() {
+            if (text_0_img_1 === 0) {
+                return "NO-GO";
+            } else {
+                return `<img src="img/angry.png" alt="angry stimulus" class="stimulus-img">`;
+            }
+        }
+
+        // These are used in the instructions screen.
+        // Notice that the wording changes depending on the mode.
+        function getGoInstruction() {
+            return text_0_img_1 === 0 ? "GO" : "the happy image";
+        }
+
+        function getNoGoInstruction() {
+            return text_0_img_1 === 0 ? "NO-GO" : "the angry image";
+        }
+
+
+        // This helper function changes the text in the message box.
+        function setMessage(text) {
+            document.getElementById("message").textContent = text;
+        }
+
+        /*10.2.2 Use ⁠addEventListener() to add a keyboard shortcut:
+        when the user presses the S key, switch between text mode and image mode */
+
+
+        // This function changes the page style.
+        // It is connected to a button using one of the event method.
+        function changeStyle() {
+            document.body.style.background = "#BDB0D0";
+            document.getElementById("startBtn").style.background = "#C3D0B0";
+        }
+
+        // This function toggles between text mode and image mode.
+        // It also updates the message and button label so the participant
+        // knows which mode is active.
+        function changeRule() {
+            if (text_0_img_1 === 0) {
+                text_0_img_1 = 1;
+                setMessage("Image mode: press SPACE for the happy image, do not press for the angry image.");
+                document.getElementById("ruleBtn").textContent = "Switch to text rule";
+            } else {
+                text_0_img_1 = 0;
+                setMessage("Text mode: press SPACE for GO, do not press for NO-GO.");
+                document.getElementById("ruleBtn").textContent = "Switch to image rule";
+            }
+        }
+
+
+        // This function creates one experimental trial.
+        // 'type' tells us whether the current trial is a GO trial or a NO-GO trial.
+        function makeTrial(type) {
+            const isGo = type === "go";
+
+            return {
+                type: jsPsychHtmlKeyboardResponse,
+                // We choose the stimulus depending on the trial type.
+                stimulus: isGo
+                        ? `<div class="stimulus-go">${getStimulusGo()}</div>`
+                        : `<div class="stimulus-nogo">${getStimulusNoGo()}</div>`,
+                choices: [" "],
+                trial_duration: 1000,
+                response_ends_trial: false,
+                // We store extra information in the data object.
+                // This is useful later when we calculate summary results.
+                data: {
+                    task: "gonogo",
+                    condition: type
+                },
+                // on_finish runs after each trial ends.
+                // Here we score the trial as correct or incorrect.
+                on_finish: function (data) {
+                    console.log("raw response:", data.response, "rt:", data.rt);
+
+                    const pressedSpace = data.response === " ";
+
+                    if (data.condition === "go") {
+                        data.correct = pressedSpace;
+                    } else {
+                        data.correct = data.response === null;
+                    }
+
+                    console.log("scored data:", data);
+                }
+            };
+        }
+
+
+  
+
+        // This creates a short blank interval between trials.
+        // In experiments, this helps separate one stimulus from the next.
+        function blank() {
+            return {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: ``,
+                choices: "NO_KEYS",
+                trial_duration: 500,
+                data: {
+                    task: "blank"
+                }
+            };
+        }
+
+        // This builds the full trial sequence.
+        // We create more GO trials than NO-GO trials so that responding becomes habitual.
+        // We also shuffle the order
+        function buildTrials(jsPsych) {
+            const trialTypes = [
+                "go", "go", "go", "go", "go",
+                "go", "go", "go", "nogo", "nogo"
+            ];
+
+            const shuffled = jsPsych.randomization.shuffle(trialTypes);
+            const timeline = [];
+
+            shuffled.forEach(function (type) {
+                timeline.push(blank());
+                timeline.push(makeTrial(type));
+            });
+
+            return timeline;
+        }
+
+
+
+        // At the end of the task, we summarize performance, to give feedback
+        function makeSummaryHTML(jsPsychInstance) {
+            const trials = jsPsychInstance.data.get().filter({ task: "gonogo" });
+            const goTrials = trials.filter({ condition: "go" });
+            const noGoTrials = trials.filter({ condition: "nogo" });
+
+            console.log("ALL GONOGO:", trials.values());
+            console.log("GO COUNT:", goTrials.count());
+            console.log("NOGO COUNT:", noGoTrials.count());
+
+            const correctGo = goTrials.filter({ correct: true });
+            const correctNoGo = noGoTrials.filter({ correct: true });
+
+            let avgRT = correctGo.select("rt").mean();
+
+            if (!Number.isFinite(avgRT)) {
+                avgRT = 0;
+            }
+
+            return `
+                <h2>Your performance</h2>
+                <p><strong>Go trials:</strong> ${goTrials.count()}</p>
+                <p><strong>No-Go trials:</strong> ${noGoTrials.count()}</p>
+                <p><strong>Correct Go responses:</strong> ${correctGo.count()}</p>
+                <p><strong>Correct No-Go inhibitions:</strong> ${correctNoGo.count()}</p>
+                <p><strong>Average RT on correct Go trials:</strong> ${Math.round(avgRT)} ms</p>
+                <p>Press any key to finish.</p>
+            `;
+        }
+
+
+
+        // This function creates and runs the experiment.
+        // jsPsych uses a timeline: welcome -> countdown-> a sequence of trials-> block feedback.
+        function runGoNoGoTask(onDone) {
+            const jsPsych = initJsPsych({
+                display_element: "jspsych-target",
+                on_finish: function () {
+                    if (onDone) {
+                        onDone(jsPsych);
+                    }
+                }
+            });
+
+            const welcome = {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: `
+                    <div>
+                        <h2>Instructions</h2>
+                        <p>Press the spacebar when you see <strong>${getGoInstruction()}</strong>.</p>
+                        <p>Do not press anything when you see <strong>${getNoGoInstruction()}</strong>.</p>
+                        <p>Press any key to begin.</p>
+                    </div>
+                `
+            };
+
+            const countdown = {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: `<div class="countdown-box">3</div>`,
+                choices: "NO_KEYS",
+                on_load: () => {
+                    let count = 3;
+                    const display = jsPsych.getDisplayElement();
+
+                    const interval = setInterval(() => {
+                        if (count > 1) {
+                            count--;
+                            display.innerHTML = `<div class="countdown-box">${count}</div>`;
+                        } else {
+                            clearInterval(interval);
+                            display.innerHTML = `<div class="countdown-box">+</div>`;
+                            setTimeout(() => jsPsych.finishTrial(), 500);
+                        }
+                    }, 1000);
+                }
+            };
+
+
+            const summary = {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: function () {
+                    return makeSummaryHTML(jsPsych);
+                }
+            };
+
+            const timeline = [
+                welcome,
+                countdown,
+                ...buildTrials(jsPsych),
+                summary
+            ];
+
+            jsPsych.run(timeline);
+        }
+
+        // Clicking the theme button changes the page style.
+        document.getElementById("themeBtn").onclick = function () {
+            changeStyle();
+            setMessage("Theme changed.");
+        };
+
+        // Clicking the rule button switches between text mode and image mode.
+        document.getElementById("ruleBtn").addEventListener("click", function () {
+            changeRule();
+        });
+
+        // This function is called by the Start button.
+        function startExperiment() {
+            document.getElementById("jspsych-target").innerHTML = "";
+            setMessage("Task started.");
+
+            runGoNoGoTask(function () {
+                setMessage("Task completed.");
+            });
+        }
+
+        /*10.2.3 Use ⁠addEventListener() to add a keyboard shortcut: when the user presses the S key, switch between text mode and image mode */
+
+    </script>
+</body>
+</html>

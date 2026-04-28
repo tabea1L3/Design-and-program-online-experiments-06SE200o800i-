@@ -24,8 +24,8 @@
                 const ctx = canvas.getContext('2d');
 
                 // then, pre-set the ball parameters
-                let x = 100;            // x position (pixels)
-                let y = 100;            // y position (pixels)
+                let x = 200;            // x position (pixels)
+                let y = 200;            // y position (pixels)
                 let dx = 2;             // horizontal speed (pixels per frame)
                 let dy = 2;             // vertical speed
                 const radius = 20;      // ball size
@@ -37,9 +37,16 @@
 
                 // 9.2.1 draw a red circle
                 function drawBall() {
-                    // TODO: 
-                    // 1. clear canvas use ctx.clearRect(0, 0, canvas.width, canvas.height)
-                    // 2. draw a red circle at (x, y) with given radius
+        
+                    // 1. clear canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+             
+                    // 2. draw blue circle
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'red';
+                    ctx.fill();
+                    ctx.closePath();
                     
                  
                 }
@@ -68,18 +75,27 @@
                     if (!startTime) startTime = timestamp;
                     const elapsed = timestamp - startTime;
 
-                    // Run for 3 seconds, then stop
-                    if (elapsed < 3000) {
+                    // Run (ball will be moving and bound off the wall) for 5 seconds, then stop
+                    if (elapsed < 5000) {
+
+                        drawBall();
+                        updatePosition();
+                        applyBouncing();
+                        animationId = requestAnimationFrame(animate);
               
 
 
                     } else {
                         // End animation
+
+                        cancelAnimationFrame(animationId);
+                
                     
                     }
                 }
 
                 // Start the animation
+                animationId = requestAnimationFrame(animate);
             
 
             }
